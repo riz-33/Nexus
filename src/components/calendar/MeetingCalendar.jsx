@@ -1,44 +1,100 @@
 import React, { useState } from "react";
-// import FullCalendar from "@fullcalendar/react";
-// import dayGridPlugin from "@fullcalendar/daygrid";
-// import timeGridPlugin from "@fullcalendar/timegrid";
-// import interactionPlugin from "@fullcalendar/interaction";
+import { Badge, Calendar, Modal, Input } from "antd";
+import dayjs from "dayjs";
 
 const MeetingCalendar = () => {
-  // const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [title, setTitle] = useState("");
+  const [open, setOpen] = useState(false);
 
-  // Slot select handler (user selects date/time)
-  // const handleSelect = (info) => {
-  //   const title = prompt("Enter Meeting Title:");
-  //   if (title) {
-  //     const newEvent = {
-  //       title,
-  //       start: info.startStr,
-  //       end: info.endStr,
-  //     };
-  //     setEvents([...events, newEvent]);
-  //   }
-  // };
+  // Open modal when date is selected
+  const handleSelect = (value) => {
+    setSelectedDate(value);
+    setOpen(true);
+  };
 
-  // Clicking event (accept/decline meeting mock)
-  // const handleEventClick = (info) => {
-  //   const action = window.confirm(
-  //     `Do you want to delete meeting: ${info.event.title}?`
-  //   );
-  //   if (action) info.event.remove();
-  // };
+  // Add meeting
+  const handleAddEvent = () => {
+    if (!title.trim()) return;
+
+    const newEvent = {
+      id: Date.now(),
+      date: selectedDate.format("YYYY-MM-DD"),
+      title,
+    };
+
+    setEvents([...events, newEvent]);
+    setTitle("");
+    setOpen(false);
+  };
+
+  // Delete meeting
+  const deleteEvent = (id) => {
+    setEvents(events.filter((event) => event.id !== id));
+  };
+
+  // Render meetings in date cell
+  const dateCellRender = (value) => {
+    const formattedDate = value.format("YYYY-MM-DD");
+    const dailyEvents = events.filter((e) => e.date === formattedDate);
+
+    return (
+      <ul style={{ paddingLeft: 10 }}>
+        {dailyEvents.map((event) => (
+          <li
+            key={event.id}
+            style={{ display: "flex", justifyContent: "space-between" }}
+          >
+            <Badge status="processing" text={event.title} />
+
+            <span
+              onClick={() => deleteEvent(event.id)}
+              style={{
+                cursor: "pointer",
+                color: "red",
+                marginLeft: 8,
+                fontWeight: "bold",
+              }}
+            >
+              ✕
+            </span>
+          </li>
+        ))}
+      </ul>
+    );
+  };
 
   return (
-    <div style={{ background: "#fff", padding: 20, borderRadius: 8 }}>
-      {/* <FullCalendar
-        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-        initialView="dayGridMonth"
-        selectable={true}
-        select={handleSelect}
-        events={events}
-        eventClick={handleEventClick}
-        height="80vh"
-      /> */}
+    <div
+      style={{
+        background: "#fff",
+        paddingLeft: 20,
+        paddingRight: 20,
+        marginTop: 10,
+        borderRadius: 8,
+      }}
+    >
+      <Calendar dateCellRender={dateCellRender} onSelect={handleSelect} />
+
+      {/* Meeting Add Modal */}
+      <Modal
+        title="Add Meeting"
+        open={open}
+        onOk={handleAddEvent}
+        onCancel={() => setOpen(false)}
+        okText="Add"
+      >
+        <p>
+          Date:{" "}
+          <b>{selectedDate ? selectedDate.format("DD MMM YYYY") : ""}</b>
+        </p>
+        <Input
+          placeholder="Meeting Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+      </Modal>
     </div>
   );
 };

@@ -5,8 +5,7 @@ export const MeetingsPage = () => {
   return (
     <div>
       <h1 className="text-2xl font-bold text-gray-900">Meeting Calendar</h1>
-
-      {/* <MeetingCalendar /> */}
+      <MeetingCalendar />
     </div>
   );
 };
