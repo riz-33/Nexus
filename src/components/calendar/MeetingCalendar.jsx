@@ -1,60 +1,76 @@
 import React, { useState } from "react";
-import { Badge, Calendar, Modal, Input } from "antd";
 import dayjs from "dayjs";
+import { useMeetings } from "../../context/MeetingsContext";
+import { useAuth } from "../../context/AuthContext";
+import MeetingRequestModal from "../collaboration/MeetingRequestModal";
+import {
+  Calendar as AntdCalendar,
+  Modal,
+  Badge,
+  Input,
+  TimePicker,
+  Button,
+} from "antd";
 
-const MeetingCalendar = () => {
-  const [events, setEvents] = useState([]);
+const MeetingCalendar = ({ currentRole }) => {
+  const { meetings, deleteMeeting } = useMeetings();
+  const { user } = useAuth();
+  const role = currentRole || (user && user.role) || "entrepreneur";
   const [selectedDate, setSelectedDate] = useState(null);
-  const [title, setTitle] = useState("");
-  const [open, setOpen] = useState(false);
+  const [openRequestModal, setOpenRequestModal] = useState(false);
+  // const [events, setEvents] = useState([]);
+  // const [title, setTitle] = useState("");
+  // const [time, setTime] = useState(null);
 
   // Open modal when date is selected
   const handleSelect = (value) => {
     setSelectedDate(value);
-    setOpen(true);
-  };
-
-  // Add meeting
-  const handleAddEvent = () => {
-    if (!title.trim()) return;
-
-    const newEvent = {
-      id: Date.now(),
-      date: selectedDate.format("YYYY-MM-DD"),
-      title,
-    };
-
-    setEvents([...events, newEvent]);
-    setTitle("");
-    setOpen(false);
-  };
-
-  // Delete meeting
-  const deleteEvent = (id) => {
-    setEvents(events.filter((event) => event.id !== id));
+    setOpenRequestModal(true);
   };
 
   // Render meetings in date cell
   const dateCellRender = (value) => {
-    const formattedDate = value.format("YYYY-MM-DD");
-    const dailyEvents = events.filter((e) => e.date === formattedDate);
+    const dateStr = value.format("YYYY-MM-DD");
+    const daily = meetings.filter((m) => m.date === dateStr);
+    if (!daily.length) return null;
 
     return (
-      <ul style={{ paddingLeft: 10 }}>
-        {dailyEvents.map((event) => (
+      <ul style={{ paddingLeft: 8 }}>
+        {daily.map((event) => (
           <li
             key={event.id}
-            style={{ display: "flex", justifyContent: "space-between" }}
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              gap: 8,
+            }}
           >
-            <Badge status="processing" text={event.title} />
+            <Badge
+              status="processing"
+              text={`${event.time ? event.time + " — " : ""}${event.title}`}
+            />
 
             <span
-              onClick={() => deleteEvent(event.id)}
               style={{
                 cursor: "pointer",
                 color: "red",
                 marginLeft: 8,
-                fontWeight: "bold",
+                fontWeight: 600,
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+                // confirm then delete
+                Modal.confirm({
+                  title: "Delete meeting?",
+                  content: `${event.title} on ${event.date} ${
+                    event.time || ""
+                  }`,
+                  onOk() {
+                    deleteMeeting(event.id);
+                  },
+                });
               }}
             >
               ✕
@@ -75,26 +91,16 @@ const MeetingCalendar = () => {
         borderRadius: 8,
       }}
     >
-      <Calendar dateCellRender={dateCellRender} onSelect={handleSelect} />
+      <AntdCalendar cellRender={dateCellRender} onSelect={handleSelect} />
 
       {/* Meeting Add Modal */}
-      <Modal
-        title="Add Meeting"
-        open={open}
-        onOk={handleAddEvent}
-        onCancel={() => setOpen(false)}
-        okText="Add"
-      >
-        <p>
-          Date:{" "}
-          <b>{selectedDate ? selectedDate.format("DD MMM YYYY") : ""}</b>
-        </p>
-        <Input
-          placeholder="Meeting Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-      </Modal>
+      <MeetingRequestModal
+        open={openRequestModal}
+        onClose={() => setOpenRequestModal(false)}
+        selectedDate={selectedDate}
+        currentRole={role}
+        currentUser={user}
+      />
     </div>
   );
 };
