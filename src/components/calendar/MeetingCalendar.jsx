@@ -1,34 +1,24 @@
+// src/components/calendar/MeetingCalendar.jsx
 import React, { useState } from "react";
+import { Calendar as AntdCalendar, Modal, Badge } from "antd";
 import dayjs from "dayjs";
 import { useMeetings } from "../../context/MeetingsContext";
 import { useAuth } from "../../context/AuthContext";
 import MeetingRequestModal from "../collaboration/MeetingRequestModal";
-import {
-  Calendar as AntdCalendar,
-  Modal,
-  Badge,
-  Input,
-  TimePicker,
-  Button,
-} from "antd";
 
 const MeetingCalendar = ({ currentRole }) => {
   const { meetings, deleteMeeting } = useMeetings();
   const { user } = useAuth();
   const role = currentRole || (user && user.role) || "entrepreneur";
+
   const [selectedDate, setSelectedDate] = useState(null);
   const [openRequestModal, setOpenRequestModal] = useState(false);
-  // const [events, setEvents] = useState([]);
-  // const [title, setTitle] = useState("");
-  // const [time, setTime] = useState(null);
 
-  // Open modal when date is selected
   const handleSelect = (value) => {
     setSelectedDate(value);
     setOpenRequestModal(true);
   };
 
-  // Render meetings in date cell
   const dateCellRender = (value) => {
     const dateStr = value.format("YYYY-MM-DD");
     const daily = meetings.filter((m) => m.date === dateStr);
@@ -36,39 +26,22 @@ const MeetingCalendar = ({ currentRole }) => {
 
     return (
       <ul style={{ paddingLeft: 8 }}>
-        {daily.map((event) => (
+        {daily.map((ev) => (
           <li
-            key={event.id}
+            key={ev.id}
+            style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 }}
             onClick={(e) => e.stopPropagation()}
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              gap: 8,
-            }}
           >
-            <Badge
-              status="processing"
-              text={`${event.time ? event.time + " — " : ""}${event.title}`}
-            />
-
+            <Badge status="processing" text={`${ev.time ? ev.time + " — " : ""}${ev.title}`} />
             <span
-              style={{
-                cursor: "pointer",
-                color: "red",
-                marginLeft: 8,
-                fontWeight: 600,
-              }}
+              style={{ marginLeft: 8, cursor: "pointer", color: "red", fontWeight: "600" }}
               onClick={(e) => {
                 e.stopPropagation();
-                // confirm then delete
                 Modal.confirm({
                   title: "Delete meeting?",
-                  content: `${event.title} on ${event.date} ${
-                    event.time || ""
-                  }`,
+                  content: `${ev.title} on ${ev.date} ${ev.time || ""}`,
                   onOk() {
-                    deleteMeeting(event.id);
+                    deleteMeeting(ev.id);
                   },
                 });
               }}
@@ -82,18 +55,8 @@ const MeetingCalendar = ({ currentRole }) => {
   };
 
   return (
-    <div
-      style={{
-        background: "#fff",
-        paddingLeft: 20,
-        paddingRight: 20,
-        marginTop: 10,
-        borderRadius: 8,
-      }}
-    >
-      <AntdCalendar cellRender={dateCellRender} onSelect={handleSelect} />
-
-      {/* Meeting Add Modal */}
+    <div style={{ background: "#fff", padding: 16, borderRadius: 8 }}>
+      <AntdCalendar dateCellRender={dateCellRender} onSelect={handleSelect} />
       <MeetingRequestModal
         open={openRequestModal}
         onClose={() => setOpenRequestModal(false)}

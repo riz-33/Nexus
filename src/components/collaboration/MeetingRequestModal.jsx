@@ -1,23 +1,27 @@
 // src/components/collaboration/MeetingRequestModal.jsx
-import React, { useState, useEffect } from "react";
-import { Modal, Input, TimePicker, Button, Select } from "antd";
+import React, { useEffect, useState } from "react";
+import { Modal, Input, TimePicker, Select } from "antd";
 import dayjs from "dayjs";
 import { useMeetings } from "../../context/MeetingsContext";
+import { useAuth } from "../../context/AuthContext";
 
 const { Option } = Select;
 
-const MeetingRequestModal = ({ open, onClose, selectedDate, currentRole }) => {
-  const role = currentRole || localStorage.getItem("role") || "entrepreneur";
+const MeetingRequestModal = ({ open, onClose, selectedDate, currentRole, currentUser }) => {
   const { addRequest, oppositeRole } = useMeetings();
+  const { user } = useAuth();
+  const role = currentRole || (user && user.role) || "entrepreneur";
 
   const [title, setTitle] = useState("");
   const [time, setTime] = useState(null);
   const [toRole, setToRole] = useState(oppositeRole(role));
+  const [toUserId, setToUserId] = useState(null); // optional: target user id
 
   useEffect(() => {
     setToRole(oppositeRole(role));
     setTitle("");
     setTime(null);
+    setToUserId(null);
   }, [open, role]);
 
   const handleSend = () => {
@@ -31,6 +35,8 @@ const MeetingRequestModal = ({ open, onClose, selectedDate, currentRole }) => {
       date: selectedDate.format("YYYY-MM-DD"),
       time: time ? time.format("HH:mm") : null,
       title: title.trim(),
+      fromUserId: currentUser?.id || (user && user.id) || null,
+      toUserId: toUserId || null, // if you want to target specific user
       fromRole: role,
       toRole,
       status: "pending",

@@ -43,7 +43,8 @@ export const MeetingsProvider = ({ children }) => {
   }, [availability]);
 
   // helper: opposite role
-  const oppositeRole = (role) => (role === "investor" ? "entrepreneur" : "investor");
+  const oppositeRole = (role) =>
+    role === "investor" ? "entrepreneur" : "investor";
 
   // Availability CRUD
   const addAvailability = (slot) => {
@@ -89,7 +90,9 @@ export const MeetingsProvider = ({ children }) => {
 
   // counts
   const pendingCount = requests.length;
-  const upcomingCount = meetings.filter((mt) => dayjs(mt.date).isAfter(dayjs().subtract(1, "day"))).length;
+  const upcomingCount = meetings.filter((mt) =>
+    dayjs(mt.date).isAfter(dayjs().subtract(1, "day"))
+  ).length;
 
   return (
     <MeetingsContext.Provider

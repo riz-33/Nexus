@@ -34,24 +34,9 @@ const AvailabilitySlots = ({ forRole }) => {
   return (
     <div style={{ background: "#fff", padding: 12, borderRadius: 8 }}>
       <h3 style={{ marginBottom: 8 }}>Availability Slots ({role})</h3>
-      <div
-        style={{
-          display: "flex",
-          gap: 8,
-          marginBottom: 8,
-          alignItems: "center",
-        }}
-      >
-        <Input
-          value={day}
-          onChange={(e) => setDay(e.target.value)}
-          style={{ width: 120 }}
-        />
-        <TimePicker
-          value={start}
-          onChange={(v) => setStart(v)}
-          format="HH:mm"
-        />
+      <div style={{ display: "flex", gap: 8, marginBottom: 8, alignItems: "center" }}>
+        <Input value={day} onChange={(e) => setDay(e.target.value)} style={{ width: 120 }} />
+        <TimePicker value={start} onChange={(v) => setStart(v)} format="HH:mm" />
         <TimePicker value={end} onChange={(v) => setEnd(v)} format="HH:mm" />
         <Button onClick={handleAdd}>Add Slot</Button>
       </div>
@@ -63,11 +48,7 @@ const AvailabilitySlots = ({ forRole }) => {
         renderItem={(item) => (
           <List.Item
             actions={[
-              <Button
-                key="del"
-                danger
-                onClick={() => deleteAvailability(item.id)}
-              >
+              <Button key="del" danger onClick={() => deleteAvailability(item.id)}>
                 Delete
               </Button>,
             ]}

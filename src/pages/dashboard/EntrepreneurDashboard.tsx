@@ -10,8 +10,14 @@ import { useAuth } from '../../context/AuthContext';
 import { CollaborationRequest } from '../../types';
 import { getRequestsForEntrepreneur } from '../../data/collaborationRequests';
 import { investors } from '../../data/users';
+import { useMeetings } from "../../context/MeetingsContext";
+
+
+// show pendingCount and upcomingCount in cards
+
 
 export const EntrepreneurDashboard: React.FC = () => {
+  const { pendingCount, upcomingCount } = useMeetings();
   const { user } = useAuth();
   const [collaborationRequests, setCollaborationRequests] = useState<CollaborationRequest[]>([]);
   const [recommendedInvestors, setRecommendedInvestors] = useState(investors.slice(0, 3));
@@ -93,7 +99,7 @@ export const EntrepreneurDashboard: React.FC = () => {
               </div>
               <div>
                 <p className="text-sm font-medium text-accent-700">Upcoming Meetings</p>
-                <h3 className="text-xl font-semibold text-accent-900">2</h3>
+                <h3 className="text-xl font-semibold text-accent-900">{upcomingCount}</h3>
               </div>
             </div>
           </CardBody>
