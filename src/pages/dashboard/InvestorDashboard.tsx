@@ -7,6 +7,7 @@ import {
   Search,
   PlusCircle,
   Calendar,
+  Wallet,
 } from "lucide-react";
 import { Button } from "../../components/ui/Button";
 import { Card, CardBody, CardHeader } from "../../components/ui/Card";
@@ -181,17 +182,18 @@ export const InvestorDashboard: React.FC = () => {
           <CardBody>
             <div className="flex items-center">
               <div className="p-3 bg-accent-100 rounded-full mr-4">
-                <Users size={20} className="text-accent-700" />
+                <Wallet size={20} className="text-accent-700" />
               </div>
               <div>
                 <p className="text-sm font-medium text-accent-700">
-                  Your Connections
+                  Wallet Balance
                 </p>
                 <h3 className="text-xl font-semibold text-accent-900">
-                  {
+                  $12,500
+                  {/* {
                     sentRequests.filter((req) => req.status === "accepted")
                       .length
-                  }
+                  } */}
                 </h3>
               </div>
             </div>
