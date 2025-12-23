@@ -33,6 +33,7 @@ import { MeetingsPage } from "./pages/calendar/MeetingsPage.jsx";
 import { SettingsPage } from "./pages/settings/SettingsPage";
 import { HelpPage } from "./pages/help/HelpPage";
 import { DealsPage } from "./pages/deals/DealsPage";
+import VideoCallMock from "./components/chat/VideoCallMock.jsx";
 
 // Chat Pages
 import { ChatPage } from "./pages/chat/ChatPage";
@@ -103,6 +104,11 @@ function App() {
             <Route path="/chat" element={<DashboardLayout />}>
               <Route index element={<ChatPage />} />
               <Route path=":userId" element={<ChatPage />} />
+            </Route>
+
+            <Route path="/call" element={<DashboardLayout />}>
+              <Route index element={<VideoCallMock />} />
+              <Route path="/call/:userId" element={<VideoCallMock />} />
             </Route>
 
             {/* Redirect root to login */}
