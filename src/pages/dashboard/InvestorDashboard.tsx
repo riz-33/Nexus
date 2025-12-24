@@ -182,18 +182,17 @@ export const InvestorDashboard: React.FC = () => {
           <CardBody>
             <div className="flex items-center">
               <div className="p-3 bg-accent-100 rounded-full mr-4">
-                <Wallet size={20} className="text-accent-700" />
+                <Users size={20} className="text-accent-700" />
               </div>
               <div>
                 <p className="text-sm font-medium text-accent-700">
-                  Wallet Balance
+                  Your Connections
                 </p>
                 <h3 className="text-xl font-semibold text-accent-900">
-                  $12,500
-                  {/* {
+                  {
                     sentRequests.filter((req) => req.status === "accepted")
                       .length
-                  } */}
+                  }
                 </h3>
               </div>
             </div>
