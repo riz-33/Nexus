@@ -7,6 +7,7 @@ import {
   Search,
   PlusCircle,
   Calendar,
+  Wallet,
 } from "lucide-react";
 import { Button } from "../../components/ui/Button";
 import { Card, CardBody, CardHeader } from "../../components/ui/Card";
