@@ -35,11 +35,10 @@ import { SettingsPage } from "./pages/settings/SettingsPage";
 import { HelpPage } from "./pages/help/HelpPage";
 import { DealsPage } from "./pages/deals/DealsPage";
 import VideoCallMock from "./components/chat/VideoCallMock.jsx";
-import { FundingPage } from "./pages/fundings/FundingPage";
 
 // Chat Pages
 import { ChatPage } from "./pages/chat/ChatPage";
-import { DealDetailsPage } from "./pages/deals/DealDetailsPage.js";
+import { DealDetailsPage } from "./pages/deals/DealDetailsPage.jsx";
 
 function App() {
   return (
@@ -101,11 +100,11 @@ function App() {
 
             <Route path="/deals" element={<DashboardLayout />}>
               <Route index element={<DealsPage />} />
-              <Route path=":dealId" element={<DealDetailsPage />} />
+              {/* <Route path=":dealId" element={<DealDetailsPage />} /> */}
             </Route>
 
-            <Route path="/fundings" element={<DashboardLayout />}>
-              <Route index element={<FundingPage />} />
+            <Route path="/dealsdetail" element={<DashboardLayout />}>
+              <Route index element={<DealDetailsPage />} />
             </Route>
 
             {/* Chat Routes */}

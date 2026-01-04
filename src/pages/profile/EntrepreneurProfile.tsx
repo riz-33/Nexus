@@ -344,8 +344,8 @@ export const EntrepreneurProfile: React.FC = () => {
                     </div>
 
                     <div className="flex justify-between items-center">
-                      <span className="text-xs font-medium">View Deals</span>
-                      <Link to="/fundings">
+                      <span className="text-xs font-medium">Active Deals</span>
+                      <Link to="/dealsdetail">
                         <ArrowRight
                           size={16}
                           className="text-primary-600 hover:text-primary-800"

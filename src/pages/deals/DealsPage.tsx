@@ -275,7 +275,7 @@ export const DealsPage: React.FC = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <Link
-                        to={`/deals/${deal.id}`}
+                        to="/dealsdetail"
                         className="inline-flex items-center px-3 py-1.5
              border border-gray-300 rounded-md
              text-sm text-gray-700 hover:bg-gray-50"
